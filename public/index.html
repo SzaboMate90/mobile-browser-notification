@@ -33,19 +33,24 @@
 <script>
   var socket = io();
 
-  var doIt = function() {var form = document.getElementById('form');
-    var input = document.getElementById('input');
+  navigator.serviceWorker.register('sw.js');
 
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      if (input.value) {
-        socket.emit('chat message', input.value);
-        input.value = '';
-      }
-    });
+  var doIt = function() {
+    navigator.serviceWorker.ready.then(function(registration) {
+      var form = document.getElementById('form');
+      var input = document.getElementById('input');
 
-    socket.on('chat message', function(msg) {
-      new Notification(msg, {tag: 'soManyNotification'});
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (input.value) {
+          socket.emit('chat message', input.value);
+          input.value = '';
+        }
+      });
+
+      socket.on('chat message', function (msg) {
+        registration.showNotification(msg, {tag: 'soManyNotification'});
+      });
     });
   }
 
