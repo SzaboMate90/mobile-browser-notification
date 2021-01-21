@@ -9,7 +9,9 @@ app.get('/', (req, res) => {
 
 io.on('connection', (socket) => {
   socket.on('chat message', msg => {
-    io.emit('chat message', msg);
+    setTimeout(function() {
+      io.emit('chat message', msg);
+    }, 3000);
   });
 });
 
