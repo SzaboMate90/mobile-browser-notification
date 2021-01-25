@@ -1,73 +1,13 @@
-<!DOCTYPE html>
 <html>
-<head>
-  <title>Socket.IO chat</title>
-  <style>
-    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-
-    #form { background: rgba(0, 0, 0, 0.15); position: fixed; top: 0; left: 0; right: 0; display: flex; height: 3rem; box-sizing: border-box; backdrop-filter: blur(10px); }
-    #input { width: 14px; border: none; padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; }
-    #input:focus { outline: none; }
-    #form > button { cursor: pointer; background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
-    ul {
-      margin: 0;
-      margin-top: 60px;
-    }
-
-  </style>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
-<ul>
-  <li>
-    Write something that you would like to receive as a notification
-  </li>
-  <li>
-    Wait 3 sec after clicking on Send button and you'll receive the notification
-  </li>
-</ul>
-<form id="form" action="">
-  <input id="input" autocomplete="off" /><button>Send</button>
-</form>
-<script src="/socket.io/socket.io.js"></script>
-
-<script>
-  var socket = io();
-
-  navigator.serviceWorker.register('sw.js');
-
-  var doIt = function() {
-    navigator.serviceWorker.ready.then(function(registration) {
-      var form = document.getElementById('form');
-      var input = document.getElementById('input');
-
-      form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        if (input.value) {
-          socket.emit('chat message', input.value);
-          input.value = '';
-        }
-      });
-
-      socket.on('chat message', function (msg) {
-        registration.showNotification(msg, {tag: 'mobileNoti'});
-      });
-    });
-  }
-
-  if (window.Notification && Notification.permission === "granted") {
-    doIt();
-  }
-  else if (window.Notification && Notification.permission !== "denied") {
-    Notification.requestPermission(function (status) {
-      if (status === "granted") {
-        doIt();
+  <head>
+    <style>
+      iframe {
+        height: 100%;
+        width: 100%;
       }
-    });
-  }
-  else if (!window.Notification) {
-    alert("Notification is not supported")
-  }
-</script>
+    </style>
+  </head>
+<body>
+<iframe src="content.html" />
 </body>
 </html>
